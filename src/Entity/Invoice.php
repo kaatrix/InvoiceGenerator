@@ -224,4 +224,9 @@ class Invoice
 
         return $this;
     }
+
+    // public function __toString()
+    // {
+    //     return $this->getInvoiceNumber();
+    // }
 }

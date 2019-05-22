@@ -11,7 +11,9 @@
         "symfony/flex": "^1.1",
         "symfony/framework-bundle": "4.2.*",
         "symfony/orm-pack": "^1.0",
-        "symfony/yaml": "4.2.*"
+        "symfony/web-server-bundle": "4.2.*",
+        "symfony/yaml": "4.2.*",
+        "tecnickcom/tcpdf": "^6.2"
     },
     "config": {
         "preferred-install": {

@@ -11,7 +11,7 @@ use App\NipContainer\NipChecker;
 use App\Controller\InvoiceController;
 use App\InvoiceContainer\InvoiceFactory;
 
-class SayHelloCommand extends Command
+class ShowInvoicesCommand extends Command
 {
     protected static $defaultName = 'app:show-invoices';
 

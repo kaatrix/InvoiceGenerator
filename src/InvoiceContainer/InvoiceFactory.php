@@ -6,19 +6,11 @@ use App\Entity\Invoice;
 use Faker\Factory;
 use Faker\Generator;
 use App\NipContainer\NipGenerator;
-use Doctrine\ORM\EntityManager;
 
 class InvoiceFactory
 {
     /** @var Generator */
     private $faker;
-
-    private $em;
-    
-    public function __construct(EntityManager $em)
-    {
-        $this->em = $em;
-    }
 
     public function fakerLoader()
     {
@@ -27,13 +19,8 @@ class InvoiceFactory
 
     private static $invoiceTaxRate = [23,8,5,0];
 
-    public function new()
+    public function createInvoice($sellerName, $sellerAddress, $sellerNip)
     {
-        self::fakerLoader();
-        $sellerName = $this->faker->company;
-        $sellerAddress = $this->faker->address;
-        $sellerNip = NipGenerator::generateNip();
-
         $invoice = new Invoice();
         $invoice->setInvoiceNumber((string)$this->faker->randomNumber())
             ->setInvoiceDate($this->faker->dateTimeBetween('-7 years', '-1 days'))
@@ -52,14 +39,16 @@ class InvoiceFactory
 
     public function createManyInvoices(int $count)
     {   
+        self::fakerLoader();
+        $sellerName = $this->faker->company;
+        $sellerAddress = $this->faker->address;
+        $sellerNip = NipGenerator::generateNip();
 
         for ($i = 0; $i < $count; $i++) {
-            $invoice = $this->new();
-            $this->em->persist($invoice);
+            $invoice = $this->createInvoice($sellerName, $sellerAddress, $sellerNip);
 
             $invoices[] = $invoice;
         }
-        $this->em->flush();
         return $invoices;
     }
 }

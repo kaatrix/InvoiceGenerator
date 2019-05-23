@@ -8,13 +8,18 @@ use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\NipContainer\NipGenerator;
 use App\NipContainer\NipChecker;
-use App\Controller\InvoiceController;
 use App\InvoiceContainer\InvoiceFactory;
 
 class ShowInvoicesCommand extends Command
 {
+    private $invoiceFactory;
     protected static $defaultName = 'app:show-invoices';
 
+    public function __construct(string $name = null, InvoiceFactory $invoiceFactory)
+    {
+        parent::__construct($name);
+        $this->invoiceFactory = $invoiceFactory;
+    }
 
     protected function configure()
     {
@@ -27,7 +32,6 @@ class ShowInvoicesCommand extends Command
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         $table = new Table($output);
-        $invoiceFactory = new InvoiceFactory();
         //$nip1 = NipGenerator::generateNip();
         //$nip2 = NipGenerator::generateFalseNip();
         //$section1 = $output->section();
@@ -37,7 +41,7 @@ class ShowInvoicesCommand extends Command
         //$section2->writeln( NipGenerator::generateFalseNip());
         //$output->writeln(NipChecker::checkNip($nip2));
 
-        foreach($invoiceFactory->createManyInvoices(20) as $invoice) {
+        foreach($this->invoiceFactory->createManyInvoices(20) as $invoice) {
             $rows[] = [$invoice->getInvoiceNumber(), 
                 $invoice->getInvoiceDate()->format('Y-m-d'),
                 $invoice->getBuyerName()."\n".$invoice->getBuyerAddress()."\n".$invoice->getBuyerNip(),

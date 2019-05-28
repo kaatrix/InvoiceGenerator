@@ -41,11 +41,14 @@ class ShowInvoicesCommand extends Command
         //$section2->writeln( NipGenerator::generateFalseNip());
         //$output->writeln(NipChecker::checkNip($nip2));
 
-        foreach($this->invoiceFactory->createManyInvoices(20) as $invoice) {
+        foreach($this->invoiceFactory->createManyInvoices(3) as $invoice) {
             $rows[] = [$invoice->getInvoiceNumber(), 
                 $invoice->getInvoiceDate()->format('Y-m-d'),
                 $invoice->getBuyerName()."\n".$invoice->getBuyerAddress()."\n".$invoice->getBuyerNip(),
                 $invoice->getSellerName()."\n".$invoice->getSellerAddress()."\n".$invoice->getSellerNip(),
+                $invoice->getDescription(),
+                $invoice->getUnit(),
+                $invoice->getPricePerUnit(),
                 $invoice->getNetValue(),
                 $invoice->getTaxRate()." %\n".$invoice->getTaxValue(),
                 $invoice->getTotalValue()];

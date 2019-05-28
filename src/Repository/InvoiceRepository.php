@@ -19,9 +19,19 @@ class InvoiceRepository extends ServiceEntityRepository
         parent::__construct($registry, Invoice::class);
     }
 
-    // /**
-    //  * @return Invoice[] Returns an array of Invoice objects
-    //  */
+    /**
+    * @return Invoice Returns an array of Invoice objects
+    */
+
+    public function findOneByInvoiceNumber(): ?Invoice
+    {
+        return $this->createQueryBuilder('i')
+            ->andWhere('i.exampleField = 41614')
+            ->getQuery()
+            ->getOneOrNullResult()
+        ;
+    }
+
     /*
     public function findByExampleField($value)
     {
@@ -32,18 +42,6 @@ class InvoiceRepository extends ServiceEntityRepository
             ->setMaxResults(10)
             ->getQuery()
             ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Invoice
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
         ;
     }
     */

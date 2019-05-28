@@ -76,6 +76,21 @@ class Invoice
      */
     private $totalValue;
 
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $description;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $unit;
+
+    /**
+     * @ORM\Column(type="float")
+     */
+    private $pricePerUnit;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -221,6 +236,42 @@ class Invoice
     public function setTotalValue(float $totalValue): self
     {
         $this->totalValue = $totalValue;
+
+        return $this;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function setDescription(string $description): self
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
+    public function getUnit(): ?int
+    {
+        return $this->unit;
+    }
+
+    public function setUnit(int $unit): self
+    {
+        $this->unit = $unit;
+
+        return $this;
+    }
+
+    public function getPricePerUnit(): ?float
+    {
+        return $this->pricePerUnit;
+    }
+
+    public function setPricePerUnit(float $pricePerUnit): self
+    {
+        $this->pricePerUnit = $pricePerUnit;
 
         return $this;
     }

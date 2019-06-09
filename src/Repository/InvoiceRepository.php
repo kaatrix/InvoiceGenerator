@@ -22,11 +22,18 @@ class InvoiceRepository extends ServiceEntityRepository
     /**
     * @return Invoice Returns an array of Invoice objects
     */
-
+    public function loadInvoice() {
+        $repository = $this->em->getRepository(Invoice::class);
+        $invoice = $repository->findOneBy(['invoiceNumber' => 41614]);
+        if (!$invoice){
+            throw new Exception();
+        }       
+        return $invoice;
+    }
     public function findOneByInvoiceNumber(): ?Invoice
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = 41614')
+            ->andWhere('i.invoiceNumber = 7')
             ->getQuery()
             ->getOneOrNullResult()
         ;

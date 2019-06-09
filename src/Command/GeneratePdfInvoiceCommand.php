@@ -6,15 +6,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use App\InvoiceContainer\InvoiceFactory;
+use App\InvoiceContainer\PdfFactory;
+use App\Repository\InvoiceRepository;
 
 class GeneratePdfInvoiceCommand extends Command
 {
-    private $invoiceFactory;
+    private $pdfFactory;
+    private $invoiceRepository;
     
-    public function __construct(string $name = null, InvoiceFactory $invoiceFactory)
+    public function __construct(string $name = null, PdfFactory $pdfFactory, InvoiceRepository $invoiceRepository)
     {
         parent::__construct($name);
-        $this->invoiceFactory = $invoiceFactory;
+        $this->pdfFactory = $pdfFactory;
+        $this->invoiceRepository = $invoiceRepository;
     }
     protected static $defaultName = 'app:pdf-generate';
 
@@ -28,6 +32,7 @@ class GeneratePdfInvoiceCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->invoiceFactory->createPDF();
+        $invoice = $this->invoiceRepository->findOneByInvoiceNumber();
+        $this->pdfFactory->createPDF($invoice);
     }
 }

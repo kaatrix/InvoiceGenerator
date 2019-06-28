@@ -8,6 +8,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 use App\InvoiceContainer\InvoiceFactory;
 use App\InvoiceContainer\PdfFactory;
 use App\Repository\InvoiceRepository;
+use Symfony\Component\Console\Input\InputArgument;
 
 class GeneratePdfInvoiceCommand extends Command
 {
@@ -27,12 +28,14 @@ class GeneratePdfInvoiceCommand extends Command
         $this
             ->setDescription('Generates invoice in PDF')
             ->setHelp('Generates invoice in PDF format from a datebase')
+            ->addArgument('invoiceNumber', InputArgument::REQUIRED, 'Invoice number you want to create PDF from')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $invoice = $this->invoiceRepository->findOneByInvoiceNumber();
+        $invoiceNumber = $input->getArgument('invoiceNumber');
+        $invoice = $this->invoiceRepository->findOneByInvoiceNumber($invoiceNumber);
         $this->pdfFactory->createPDF($invoice);
     }
 }

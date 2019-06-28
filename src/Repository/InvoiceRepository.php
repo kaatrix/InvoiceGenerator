@@ -30,10 +30,11 @@ class InvoiceRepository extends ServiceEntityRepository
         }       
         return $invoice;
     }
-    public function findOneByInvoiceNumber(): ?Invoice
+    public function findOneByInvoiceNumber($invoiceNumber): ?Invoice
     {
         return $this->createQueryBuilder('i')
-            ->andWhere('i.invoiceNumber = 7')
+            ->andWhere('i.invoiceNumber = :invoiceNumber')
+            ->setParameter('invoiceNumber', $invoiceNumber)
             ->getQuery()
             ->getOneOrNullResult()
         ;

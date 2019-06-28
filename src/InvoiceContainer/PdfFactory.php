@@ -73,6 +73,6 @@ class PdfFactory
         $valueDataAmounts = $invoice->getNetValue()."\n".$invoice->getTaxValue()."\n".$invoice->getTotalValue();
         $pdf->MultiCell(60, 60, $valueDataNames, 0, 'L', 0, 0, 115, '', true);
         $pdf->MultiCell(60, 60, $valueDataAmounts, 0, 'R', 0, 1, 120, '', true);
-        $pdf->Output(__DIR__ . '/invoices/test_001.pdf', 'F');
+        $pdf->Output(__DIR__ . '/invoices/'.$invoice->getInvoiceNumber().'.pdf', 'F');
     }
 }

@@ -33,7 +33,7 @@ class SaveInvoicesToDatabeseCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-       foreach ($this->invoiceFactory->createManyInvoices(3) as $invoice) {
+       foreach ($this->invoiceFactory->createManyInvoices(5) as $invoice) {
            $this->em->persist($invoice);
        }
 

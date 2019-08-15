@@ -40,6 +40,13 @@ class InvoiceRepository extends ServiceEntityRepository
         ;
     }
 
+    public function FindAllInvoices(){
+        return $this->createQueryBuilder('i')
+            ->getQuery()
+            ->getResult()
+        ;
+    }
+
     /*
     public function findByExampleField($value)
     {

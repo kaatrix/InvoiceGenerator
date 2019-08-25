@@ -5,8 +5,8 @@ namespace App\Command;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\InvoiceContainer\InvoiceFactory;
-use App\InvoiceContainer\PdfFactory;
+use App\Factory\InvoiceFactory;
+use App\Factory\PdfFactory;
 use App\Repository\InvoiceRepository;
 use Symfony\Component\Console\Input\InputArgument;
 

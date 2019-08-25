@@ -1,6 +1,6 @@
 <?php
 
-namespace App\NipContainer;
+namespace App\Nip;
 
 class NipChecker
 {

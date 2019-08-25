@@ -6,9 +6,9 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
-use App\NipContainer\NipGenerator;
-use App\NipContainer\NipChecker;
-use App\InvoiceContainer\InvoiceFactory;
+use App\Nip\NipGenerator;
+use App\Nip\NipChecker;
+use App\Factory\InvoiceFactory;
 
 class ShowInvoicesCommand extends Command
 {

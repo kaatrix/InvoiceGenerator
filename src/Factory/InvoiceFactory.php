@@ -1,11 +1,11 @@
 <?php
 
-namespace App\InvoiceContainer;
+namespace App\Factory;
 
 use App\Entity\Invoice;
 use Faker\Factory;
 use Faker\Generator;
-use App\NipContainer\NipGenerator;
+use App\Nip\NipGenerator;
 use Doctrine\ORM\EntityManagerInterface;
 
 class InvoiceFactory

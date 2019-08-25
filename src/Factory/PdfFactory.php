@@ -1,6 +1,6 @@
 <?php
 
-namespace App\InvoiceContainer;
+namespace App\Factory;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Config\Definition\Exception\Exception;

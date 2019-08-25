@@ -18,7 +18,7 @@ class EmailSender
         $message = (new \Swift_Message('Invoice to your order'))
             ->setFrom('czarodziejskasymfonia@gmail.com')
             ->setTo($email)
-            ->attach(Swift_Attachment::fromPath(__DIR__ . '/../InvoiceContainer/invoices/'.$invoiceNumber.'.pdf'))
+            ->attach(Swift_Attachment::fromPath(__DIR__ . '/../Factory/invoices/'.$invoiceNumber.'.pdf'))
             ->setBody("Dear Customer<br>
             Thank you for shopping with our store! We thought you'd like to know your order has been completed and it has been despatched to you.<br>
             Your invoice is attached to this email in PDF format.<br>

@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use App\Email\EmailSender;
+use App\Factory\CsvFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Repository\InvoiceRepository;
@@ -9,56 +11,63 @@ use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class InvoiceController
 {
-    private $invoiceRepository;
     
-        public function __construct(InvoiceRepository $invoiceRepository)
+    private $invoiceRepository;
+    private $csvFactory;
+    private $emailSender;
+    
+        public function __construct(InvoiceRepository $invoiceRepository, CsvFactory $csvFactory, EmailSender $emailSender)
         {
             $this->invoiceRepository = $invoiceRepository;
+            $this->csvFactory = $csvFactory;
+            $this->emailSender = $emailSender;
         }
     /**
-     * @Route("/downloadCsvInvoiceFile/{invoiceNumber}")
+     * @Route("/download-csv-invoice-file/{invoiceNumber}")
      */
     public function downloadCsvInvoiceFile($invoiceNumber)
-    {        
-        header('Content-type: text/csv');
-        header("Content-Disposition: attachment; filename=$invoiceNumber.csv");
-        header('Pragma: no-cache');
-        header('Expires: 0');
+    {    
+        $invoice = $this->invoiceRepository->findOneByInvoiceNumber($invoiceNumber);  
+        $this->createHeaders($invoiceNumber);
 
         $file = fopen('php://output', 'w');
-        fputcsv($file, array('Invoice number', 'Invoice date', 'Buyer name', 'Buyer address', 'Buyer NIP', 'Seller name', 'Seller address',
-            'Seller NIP', 'Description','Unit', 'Price per unit', 'Net_value', 'Tax rate', 'Tax value', 'Total value'));
-        $invoice = $this->invoiceRepository->findOneByInvoiceNumber($invoiceNumber);
-        fputcsv($file, array($invoice->getInvoiceNumber(),$invoice->getInvoiceDate()->format('Y-m-d'),
-            $invoice->getBuyerName(), $invoice->getBuyerAddress(), $invoice->getBuyerNip(),
-            $invoice->getSellerName(), $invoice->getSellerAddress(), $invoice->getSellerNip(),
-            $invoice->getDescription(), $invoice->getUnit(), $invoice->getPricePerUnit(),
-            $invoice->getNetValue(), $invoice->getTaxRate(),$invoice->getTaxValue(), $invoice->getTotalValue()));
-        return new Response('Invoice is getting downloaded');
+        $this->csvFactory->createCsvHeader($file);
+        $this->csvFactory->createCsvLine($file, $invoice);
+
+        return new Response();
     }
 
     /**
-     *  @Route("/downloadCsvInvoicesPackage")
+     *  @Route("/download-csv-invoices-package")
      */
     public function downloadCsvInvoicesPackage()
     {
-        header('Content-type: text/csv');
-        header('Content-Disposition: attachment; filename="Invoices.csv"');
-        header('Pragma: no-cache');
-        header('Expires: 0');
+        $filename = 'Invoices.csv';
+        $invoices = $this->invoiceRepository->FindAllInvoices();
+        $this->createHeaders($filename);
 
         $file = fopen('php://output', 'w');
-        fputcsv($file, array('Invoice number', 'Invoice date', 'Buyer name', 'Buyer address', 'Buyer NIP', 'Seller name', 'Seller address',
-            'Seller NIP', 'Description','Unit', 'Price per unit', 'Net_value', 'Tax rate', 'Tax value', 'Total value'));
-        $invoices = $this->invoiceRepository->FindAllInvoices();
+        $this->csvFactory->createCsvHeader($file);
         
         foreach($invoices as $invoice){
-            fputcsv($file, array($invoice->getInvoiceNumber(),$invoice->getInvoiceDate()->format('Y-m-d'),
-            $invoice->getBuyerName(), $invoice->getBuyerAddress(), $invoice->getBuyerNip(),
-            $invoice->getSellerName(), $invoice->getSellerAddress(), $invoice->getSellerNip(),
-            $invoice->getDescription(), $invoice->getUnit(), $invoice->getPricePerUnit(),
-            $invoice->getNetValue(), $invoice->getTaxRate(),$invoice->getTaxValue(), $invoice->getTotalValue()));
+            $this->csvFactory->createCsvLine($file, $invoice);
         }
-        return new Response("package of invoices is geting downloaded");
+        return new Response();
+    }
+    /**
+     * @Route("/download-csv-invoice-file/{invoiceNumber}/{emailAddress}")
+     */
+    public function sendCsvInvoiceFileToEmail($invoiceNumber, $emailAddress)
+    {    
+        $this->emailSender->sendEmail($emailAddress, $invoiceNumber);
+        return new Response();
+    }
+
+    private function createHeaders($filename)
+    {
+        header('Content-type: text/csv');
+        header("Content-Disposition: attachment; filename=$filename.csv");
+        header('Pragma: no-cache');
+        header('Expires: 0');
     }
 } 

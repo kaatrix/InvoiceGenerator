@@ -6,10 +6,10 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
-use App\InvoiceContainer\InvoiceFactory;
+use App\Factory\InvoiceFactory;
 use Doctrine\ORM\EntityManagerInterface;
 
-class SaveInvoicesToDatabeseCommand extends Command
+class SaveInvoicesToDatabaseCommand extends Command
 {
     private $em;
     private $invoiceFactory;

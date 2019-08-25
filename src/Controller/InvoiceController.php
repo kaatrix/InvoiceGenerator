@@ -7,6 +7,7 @@ use App\Factory\CsvFactory;
 use Symfony\Component\HttpFoundation\Response;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use App\Repository\InvoiceRepository;
+use App\Service\InvoiceService;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 
 class InvoiceController
@@ -15,12 +16,14 @@ class InvoiceController
     private $invoiceRepository;
     private $csvFactory;
     private $emailSender;
+    private $invoiceService;
     
-        public function __construct(InvoiceRepository $invoiceRepository, CsvFactory $csvFactory, EmailSender $emailSender)
+        public function __construct(InvoiceRepository $invoiceRepository, CsvFactory $csvFactory, EmailSender $emailSender, InvoiceService $invoiceService)
         {
             $this->invoiceRepository = $invoiceRepository;
             $this->csvFactory = $csvFactory;
             $this->emailSender = $emailSender;
+            $this->invoiceService = $invoiceService;
         }
     /**
      * @Route("/download-csv-invoice-file/{invoiceNumber}")
@@ -55,14 +58,22 @@ class InvoiceController
         return new Response();
     }
     /**
-     * @Route("/download-csv-invoice-file/{invoiceNumber}/{emailAddress}")
+     * @Route("/send-pdf-invoice-to-email/{invoiceNumber}/{emailAddress}")
      */
-    public function sendCsvInvoiceFileToEmail($invoiceNumber, $emailAddress)
+    public function sendInvoiceFileToEmail($invoiceNumber, $emailAddress)
     {    
         $this->emailSender->sendEmail($emailAddress, $invoiceNumber);
         return new Response();
     }
 
+    /**
+     * @Route("/add-new-invoices-to-database/{count}")
+     */
+    public function addNewInvoicesToDatabase($count)
+    {    
+        $this->invoiceService->saveInvoicesToDatabase($count);
+        return new Response();
+    }
     private function createHeaders($filename)
     {
         header('Content-type: text/csv');

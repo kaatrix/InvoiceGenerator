@@ -41,7 +41,7 @@ class InvoiceFactory
         return $invoice;
     }
 
-    public function createManyInvoices(int $count)
+    public function createInvoices(int $count)
     {   
         self::fakerLoader();
         $sellerName = $this->faker->company;

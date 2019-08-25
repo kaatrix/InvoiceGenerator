@@ -6,11 +6,12 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
+use Symfony\Component\Console\Input\InputArgument;
 use App\Nip\NipGenerator;
 use App\Nip\NipChecker;
 use App\Factory\InvoiceFactory;
 
-class ShowInvoicesCommand extends Command
+class ShowNewInvoicesCommand extends Command
 {
     private $invoiceFactory;
     protected static $defaultName = 'app:show-invoices';
@@ -26,6 +27,7 @@ class ShowInvoicesCommand extends Command
        $this
             ->setDescription('Shows invoices')
             ->setHelp('Show invoices gathered together')
+            ->addArgument('count', InputArgument::REQUIRED, 'number of invoices you want to add to datebase')
         ;
     }
 
@@ -40,8 +42,8 @@ class ShowInvoicesCommand extends Command
         //$output->writeln(NipChecker::checkNip($nip1));
         //$section2->writeln( NipGenerator::generateFalseNip());
         //$output->writeln(NipChecker::checkNip($nip2));
-
-        foreach($this->invoiceFactory->createManyInvoices(3) as $invoice) {
+        $count = intval($input->getArgument('count'));
+        foreach($this->invoiceFactory->createInvoices($count) as $invoice) {
             $rows[] = [$invoice->getInvoiceNumber(), 
                 $invoice->getInvoiceDate()->format('Y-m-d'),
                 $invoice->getBuyerName()."\n".$invoice->getBuyerAddress()."\n".$invoice->getBuyerNip(),

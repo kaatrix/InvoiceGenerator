@@ -6,19 +6,19 @@ use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Style\SymfonyStyle;
+use Symfony\Component\Console\Input\InputArgument;
 use App\Factory\InvoiceFactory;
+use App\Service\InvoiceService;
 use Doctrine\ORM\EntityManagerInterface;
 
 class SaveInvoicesToDatabaseCommand extends Command
 {
-    private $em;
-    private $invoiceFactory;
+    private $invoiceService;
     
-    public function __construct(string $name = null, EntityManagerInterface $em, InvoiceFactory $invoiceFactory)
+    public function __construct(string $name = null, InvoiceService $invoiceService)
     {
         parent::__construct($name);
-        $this->em = $em;
-        $this->invoiceFactory = $invoiceFactory;
+        $this->invoiceService = $invoiceService;
     }
 
     protected static $defaultName = 'app:save-invoices';
@@ -28,15 +28,13 @@ class SaveInvoicesToDatabaseCommand extends Command
         $this
             ->setDescription('Save invoices to database')
             ->setHelp('Saves generated invoices to database')
+            ->addArgument('count', InputArgument::REQUIRED, 'number of invoices you want to add to datebase')
         ;
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-       foreach ($this->invoiceFactory->createManyInvoices(5) as $invoice) {
-           $this->em->persist($invoice);
-       }
-
-       $this->em->flush();
+        $count = $input->getArgument('count');
+        $this->invoiceService->saveInvoicesToDatabase($count);
     }
 }

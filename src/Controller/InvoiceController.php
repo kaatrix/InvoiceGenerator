@@ -18,13 +18,14 @@ class InvoiceController
     private $emailSender;
     private $invoiceService;
     
-        public function __construct(InvoiceRepository $invoiceRepository, CsvFactory $csvFactory, EmailSender $emailSender, InvoiceService $invoiceService)
-        {
-            $this->invoiceRepository = $invoiceRepository;
-            $this->csvFactory = $csvFactory;
-            $this->emailSender = $emailSender;
-            $this->invoiceService = $invoiceService;
-        }
+    public function __construct(InvoiceRepository $invoiceRepository, CsvFactory $csvFactory, EmailSender $emailSender, InvoiceService $invoiceService)
+    {
+        $this->invoiceRepository = $invoiceRepository;
+        $this->csvFactory = $csvFactory;
+        $this->emailSender = $emailSender;
+        $this->invoiceService = $invoiceService;
+    }
+
     /**
      * @Route("/download-csv-invoice-file/{invoiceNumber}")
      */
